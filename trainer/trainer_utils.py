@@ -73,7 +73,13 @@ def lm_checkpoint(lm_config, weight='full_sft', model=None, optimizer=None, epoc
         state_dict = {k: v.half().cpu() for k, v in state_dict.items()}
         ckp_tmp = ckp_path + '.tmp'
         torch.save(state_dict, ckp_tmp)
-        os.replace(ckp_tmp, ckp_path)
+        # Windows兼容处理：文件被占用时先删除再替换
+        try:
+            os.replace(ckp_tmp, ckp_path)
+        except OSError:
+            if os.path.exists(ckp_path):
+                os.remove(ckp_path)
+            os.replace(ckp_tmp, ckp_path)
         wandb_id = None
         if wandb:
             if hasattr(wandb, 'get_run'):
@@ -101,7 +107,13 @@ def lm_checkpoint(lm_config, weight='full_sft', model=None, optimizer=None, epoc
 
         resume_tmp = resume_path + '.tmp'
         torch.save(resume_data, resume_tmp)
-        os.replace(resume_tmp, resume_path)
+        # Windows兼容处理：文件被占用时先删除再替换
+        try:
+            os.replace(resume_tmp, resume_path)
+        except OSError:
+            if os.path.exists(resume_path):
+                os.remove(resume_path)
+            os.replace(resume_tmp, resume_path)
         del state_dict, resume_data
         torch.cuda.empty_cache()
     else:  # 加载模式

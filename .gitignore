@@ -1,4 +1,44 @@
-model/__pycache__
-out
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+
+# Dataset files
+*.jsonl
+*.json
+
+# Model weights and checkpoints
+*.pth
+*.pt
+*.bin
+*.safetensors
+*.ckpt
+checkpoints/
+
+# Output files
+out/
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Other
 website/
 docs-minimind/
